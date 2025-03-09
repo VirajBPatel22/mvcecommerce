@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>New Product</title>
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .image-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 5px;
+        }
+        .image-wrapper img {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <a class="back" href="http://localhost/ecommerecemvc/admin/product_index/list">
+            <i class="fa fa-arrow-left"></i> Back
+        </a>
+        <?php
+            $product = $this->getProduct();
+            $arrtribute = $this->getAttribute();
+        ?>
+        <form method="POST" action="<?php echo $this->getUrl('*/*/save'); ?>" enctype="multipart/form-data">
+            <input type="hidden" name="catalog_product[product_id]" value="<?php echo $product->getProductId(); ?>">
+            
+            <!-- Product fields -->
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="catalog_product[name]" required pattern="^[A-Za-z][A-Za-z ]*$"
+                    value="<?php echo $product->getName(); ?>">
+            </div>
+            
+            <div class="form-group">
+                <label for="sku">SKU:</label>
+                <input type="text" id="sku" name="catalog_product[sku]" 
+                    value="<?php echo $product->getSku(); ?>">
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="catalog_product[description]" required><?php echo $product->getDescription(); ?></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="price">Price:</label>
+                <input type="number" id="price" name="catalog_product[price]"  min="0"
+                    value="<?php echo $product->getPrice(); ?>">
+            </div>
+            
+            <div class="form-group">
+                <label for="stock_quantity">Stock Quantity:</label>
+                <input type="number" id="stock_quantity" name="catalog_product[stock_quantity]"  min="0"
+                    value="<?php echo $product->getStockQuantity(); ?>">
+            </div>
+            
+            <div class="form-group">
+                <label for="category_id">Category:</label>
+                <select name="catalog_product[category_id]" id="category_id">
+                    <?php 
+                    $data = $this->getCategory();
+                    foreach ($data as $cate) {
+                    ?>
+                        <option value="<?php echo  $cate->getCategoryId(); ?>" 
+                            <?php echo ($cate->getCategoryId() == $product->getCategoryId()) ? 'selected' : ''; ?>>
+                            <?php echo  $cate->getName(); ?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+            
+            <hr>
+            
+            <label for="attribute_data">Attribute Data</label>
+            <div class="form-group">
+                <?php
+                $attridata = $this->getAttridata();
+                $attributes = $this->getAttribute(); // Fetch all attributes from DB
+                if (!empty($attridata)) {
+                    foreach ($attridata as $attribute) {
+                        $attributeId = $attribute->getAttributeId();
+                        $attributeValue = $attribute->getValue();
+                        $attributeValueId = $attribute->getValueId();
+                        $attributedata = Mage::getModel('catalog/attribute')->load($attributeId);
+                        $attributeName = $attributedata->getName();
+                        $attributeType = $attributedata->getType();
+                ?>
+                        <div class="form-group">
+                            <label><?php echo ucfirst($attributeName); ?>:</label>
+                            <?php if ($attributeType == 'text') { ?>
+                                <input type="text" name="catalog_product[<?php echo $attributeName; ?>]" value="<?php echo $attributeValue; ?>">
+                            <?php } elseif ($attributeType == 'number') { ?>
+                                <input type="number" name="catalog_product[<?php echo $attributeName; ?>]" value="<?php echo $attributeValue; ?>">
+                            <?php } elseif ($attributeType == 'date') { ?>
+                                <input type="date" name="catalog_product[<?php echo $attributeName; ?>]" value="<?php echo $attributeValue; ?>">
+                            <?php } elseif ($attributeType == 'boolean') { ?>
+                                <select name="catalog_product[<?php echo $attributeName; ?>]">
+                                    <option value="1" <?php echo ($attributeValue == '1') ? 'selected' : ''; ?>>Yes</option>
+                                    <option value="0" <?php echo ($attributeValue == '0') ? 'selected' : ''; ?>>No</option>
+                                </select>
+                            <?php } ?>
+                        </div>
+                    <?php }
+                } else {
+                    foreach ($attributes as $attribute) {
+                        $attributeId = $attribute->getAttributeId();
+                        $attributeName = $attribute->getName();
+                        $attributeType = $attribute->getType();
+                        $attributeValue = $product->getAttributeValue($attributeId); // Fetch value if editing
+                    ?>
+                        <div class="form-group">
+                            <label><?php echo ucfirst($attributeName); ?>:</label>
+                            <?php if ($attributeType == 'text') { ?>
+                                <input type="text" name="catalog_product_attribute[<?php echo $attributeName; ?>]" value="<?php echo $attributeValue; ?>">
+                            <?php } elseif ($attributeType == 'number') { ?>
+                                <input type="number" name="catalog_product_attribute[<?php echo $attributeName; ?>]" value="<?php echo $attributeValue; ?>">
+                            <?php } elseif ($attributeType == 'date') { ?>
+                                <input type="date" name="catalog_product_attribute[<?php echo $attributeName; ?>]" value="<?php echo $attributeValue; ?>">
+                            <?php } elseif ($attributeType == 'boolean') { ?>
+                                <select name="catalog_product_attribute[<?php echo $attributeName; ?>]">
+                                    <option value="1" <?php echo ($attributeValue == '1') ? 'selected' : ''; ?>>Yes</option>
+                                    <option value="0" <?php echo ($attributeValue == '0') ? 'selected' : ''; ?>>No</option>
+                                </select>
+                            <?php } ?>
+                        </div>
+                <?php }
+                }
+                ?>
+            </div>
+            
+            <hr>
+            <!-- Previously Uploaded Images -->
+            <?php
+                // Retrieve previously uploaded images for the product.
+                $images = Mage::getModel('catalog/media')->getCollection()
+                           ->addFieldToFilter('product_id', $product->getProductId());
+            ?>
+            <?php if ($images->count()): ?>
+                <h3>Previously Uploaded Images</h3>
+                <div id="existing-images" class="image-preview-container">
+                    <?php foreach ($images as $img): 
+                        $path = $img->getFilePath();
+                        $isMain = $img->getDefaultImg() == 1;
+                    ?>
+                        <div class="image-wrapper" data-image-id="<?php echo $img->getId(); ?>">
+                            <img src="<?php echo $path; ?>" width="100" height="100" style="object-fit: cover;">
+                            <label>
+                                <input type="radio" name="catalog_product[main_image]" value="<?php echo $path; ?>" <?php echo ($isMain) ? 'checked' : ''; ?>>
+                                Main Image
+                            </label>
+                            <button type="button" onclick="removeExistingImage(this)">Remove</button>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+            
+            <!-- Upload New Images -->
+            <label for="image_upload">Upload New Images</label>
+            <input type="file" name="catalog_product[image][]" multiple accept="image/*">
+            <!-- Container for new image previews -->
+            <div id="new-images" class="image-preview-container"></div>
+            
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+    // Function to remove an existing image from the form view.
+    function removeExistingImage(button) {
+        var wrapper = button.closest('.image-wrapper');
+        var imageId = wrapper.getAttribute('data-image-id');
+        // Append a hidden input to mark this image for deletion on the back-end.
+        var form = wrapper.closest('form');
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'delete_images[]';
+        input.value = imageId;
+        form.appendChild(input);
+        // Remove the image from the view.
+        wrapper.remove();
+    }
+
+    // Preview newly uploaded images with radio buttons for main image selection.
+    document.addEventListener("DOMContentLoaded", function () {
+        var fileInput = document.querySelector("input[name='catalog_product[image][]']");
+        var newImagesContainer = document.getElementById("new-images");
+        fileInput.addEventListener("change", function (event) {
+            // Clear previous new image previews
+            newImagesContainer.innerHTML = "";
+            var files = event.target.files;
+            for (let i = 0; i < files.length; i++) {
+                (function(file, index) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var imageWrapper = document.createElement("div");
+                        imageWrapper.classList.add("image-wrapper");
+                        
+                        var img = document.createElement("img");
+                        img.src = e.target.result;
+                        img.width = 100;
+                        img.height = 100;
+                        img.style.borderRadius = "10px";
+                        img.style.objectFit = "cover";
+                        img.style.margin = "5px";
+                        
+                        // Radio button for selecting the new image as the main image.
+                        var radioInput = document.createElement("input");
+                        radioInput.type = "radio";
+                        radioInput.name = "catalog_product[main_image]";
+                        radioInput.value = file.name; // using file name as a unique identifier
+                        if (index === 0 && !document.querySelector("input[name='catalog_product[main_image]']:checked")) {
+                            radioInput.checked = true;
+                        }
+                        
+                        // Remove button for the new image preview.
+                        var removeButton = document.createElement("button");
+                        removeButton.type = "button";
+                        removeButton.textContent = "Remove";
+                        removeButton.onclick = function () {
+                            imageWrapper.remove();
+                        };
+                        
+                        imageWrapper.appendChild(img);
+                        imageWrapper.appendChild(radioInput);
+                        imageWrapper.appendChild(removeButton);
+                        newImagesContainer.appendChild(imageWrapper);
+                    };
+                    reader.readAsDataURL(file);
+                })(files[i], i);
+            }
+        });
+    });
+    </script>
+
+</body>
+</html>

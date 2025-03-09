@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>New Product</title>
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .image-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 5px;
+        }
+        .image-wrapper img {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <a class="back" href="http://localhost/ecommerecemvc/admin/product_index/list">
+            <i class="fa fa-arrow-left"></i> Back
+        </a>
+        <?php
+        $product = $this->getProduct();
+        $arrtribute = $this->getAttribute();
+        $imgdata = $this->getImagedata();
+        ?>
+        <form method="POST" action="<?php echo $this->getUrl('*/*/save'); ?>" enctype="multipart/form-data">
+            <input type="hidden" name="catalog_product[product_id]" value="<?php echo $product->getProductId(); ?>">
+            
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="catalog_product[name]" required pattern="^[A-Za-z][A-Za-z ]*$"
+                    value="<?php echo $product->getName(); ?>">
+            </div>
+            
+            <div class="form-group">
+                <label for="sku">SKU:</label>
+                <input type="text" id="sku" name="catalog_product[sku]" 
+                    value="<?php echo $product->getSku(); ?>">
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="catalog_product[description]" required><?php echo $product->getDescription(); ?></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="price">Price:</label>
+                <input type="number" id="price" name="catalog_product[price]"  min="0"
+                    value="<?php echo $product->getPrice(); ?>">
+            </div>
+            
+            <div class="form-group">
+                <label for="stock_quantity">Stock Quantity:</label>
+                <input type="number" id="stock_quantity" name="catalog_product[stock_quantity]"  min="0"
+                    value="<?php echo $product->getStockQuantity(); ?>">
+            </div>
+            
+            <div class="form-group">
+                <label for="category_id">Category:</label>
+                <select name="catalog_product[category_id]" id="category_id">
+                    <?php 
+                    $data = $this->getCategory();
+                    foreach ($data as $cate) {
+                    ?>
+                        <option value="<?php echo  $cate->getCategoryId(); ?>"> <?php echo  $cate->getName(); ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            
+            <hr>
+            
+            <label for="attribute_data">Attribute Data</label>
+            <div class="form-group">
+                <?php
+                $attridata = $this->getAttridata();
+                $attributes = $this->getAttribute(); // Fetch all attributes from DB
+                if (!empty($attridata)) {
+                    foreach ($attridata as $attribute) {
+                        $attributeId = $attribute->getAttributeId();
+                        $attributeValue = $attribute->getValue();
+                        $attributeValueId = $attribute->getValueId();
+                        $attributedata = Mage::getModel('catalog/attribute')->load($attributeId);
+                        $attributeName = $attributedata->getName();
+                        $attributeType = $attributedata->getType();
+                ?>
+                        <div class="form-group">
+                            <label><?php echo ucfirst($attributeName); ?>:</label>
+                            <?php if ($attributeType == 'text') { ?>
+                                <input type="text" name="catalog_product[<?php echo $attributeName; ?>]" value="<?php echo $attributeValue; ?>">
+                            <?php } elseif ($attributeType == 'number') { ?>
+                                <input type="number" name="catalog_product[<?php echo $attributeName; ?>]" value="<?php echo $attributeValue; ?>">
+                            <?php } elseif ($attributeType == 'date') { ?>
+                                <input type="date" name="catalog_product[<?php echo $attributeName; ?>]" value="<?php echo $attributeValue; ?>">
+                            <?php } elseif ($attributeType == 'boolean') { ?>
+                                <select name="catalog_product[<?php echo $attributeName; ?>]">
+                                    <option value="1" <?php echo ($attributeValue == '1') ? 'selected' : ''; ?>>Yes</option>
+                                    <option value="0" <?php echo ($attributeValue == '0') ? 'selected' : ''; ?>>No</option>
+                                </select>
+                            <?php } ?>
+                        </div>
+                    <?php }
+                } else {
+                    foreach ($attributes as $attribute) {
+                        $attributeId = $attribute->getAttributeId();
+                        $attributeName = $attribute->getName();
+                        $attributeType = $attribute->getType();
+                        $attributeValue = $product->getAttributeValue($attributeId); // Fetch value if editing
+                    ?>
+                        <div class="form-group">
+                            <label><?php echo ucfirst($attributeName); ?>:</label>
+                            <?php if ($attributeType == 'text') { ?>
+                                <input type="text" name="catalog_product_attribute[<?php echo $attributeName; ?>]" value="<?php echo $attributeValue; ?>">
+                            <?php } elseif ($attributeType == 'number') { ?>
+                                <input type="number" name="catalog_product_attribute[<?php echo $attributeName; ?>]" value="<?php echo $attributeValue; ?>">
+                            <?php } elseif ($attributeType == 'date') { ?>
+                                <input type="date" name="catalog_product_attribute[<?php echo $attributeName; ?>]" value="<?php echo $attributeValue; ?>">
+                            <?php } elseif ($attributeType == 'boolean') { ?>
+                                <select name="catalog_product_attribute[<?php echo $attributeName; ?>]">
+                                    <option value="1" <?php echo ($attributeValue == '1') ? 'selected' : ''; ?>>Yes</option>
+                                    <option value="0" <?php echo ($attributeValue == '0') ? 'selected' : ''; ?>>No</option>
+                                </select>
+                            <?php } ?>
+                        </div>
+                <?php }
+                }
+                ?>
+            </div>
+            
+            <hr>
+            <label for="previous image">
+
+            <?php  ?>
+            </label>
+            
+            <label for="images">Upload Images:</label>
+        <input type="file" id="images" name="catalog_product[images][]" multiple accept="image/*" oninput="test()"><br><br>
+        <!-- <div id="img_div" style="display: none;"> -->
+
+        <!-- </div> -->
+        <button type="submit">Submit</button>
+        </form>
+    </div>
+    <div>
+    <?php
+        $base_url = Mage::getBaseUrl();
+        // print_r($productData->getFiles());
+        // die;
+        if ($product->getFiles() > 0) {
+            for ($i = 0; $i < count($productData->getFiles()); $i++): ?>
+                <?php $path = $base_url . $product->getFiles()[$i]; ?>
+                <img src="<?php echo $path; ?>" height="100" width="100">
+        <?php endfor;
+        } ?>
+    </div>
+
+    <!-- <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const fileInput = document.querySelector("input[name='catalog_product[image][]']");
+            const imagePreviewContainer = document.createElement("div");
+            imagePreviewContainer.classList.add("image-preview-container");
+            fileInput.parentNode.insertBefore(imagePreviewContainer, fileInput.nextSibling);
+
+            fileInput.addEventListener("change", function (event) {
+                imagePreviewContainer.innerHTML = ""; // Clear previous previews
+                const files = event.target.files;
+                
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        const imageWrapper = document.createElement("div");
+                        imageWrapper.classList.add("image-wrapper");
+                        
+                        const img = document.createElement("img");
+                        img.src = e.target.result;
+                        img.width = 150;
+                        img.height = 150;
+                        img.style.borderRadius = "10px";
+                        img.style.objectFit = "cover";
+                        img.style.margin = "5px";
+                        
+                        const radioInput = document.createElement("input");
+                        radioInput.type = "radio";
+                        radioInput.name = "catalog_product[main_image]";
+                        radioInput.value = file.name; // using file name as unique identifier
+                        
+                        if (i === 0) {
+                            radioInput.checked = true; // Default first image as main
+                        }
+                        
+                        imageWrapper.appendChild(img);
+                        imageWrapper.appendChild(radioInput);
+                        imagePreviewContainer.appendChild(imageWrapper);
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script> -->
+    <script>
+        // <script>
+        function test() {
+
+            document.getElementById("img_div").innerHTML = "";
+            var img_data = "";
+            var img = document.getElementById("images").files;
+            for (var i = 0; i < img.length; i++) {
+                img_data +=
+                    "<label><input type='radio' name='catalog_product[main_image]' value='" + img[i].name + "'> " + img[i].name + "</label><br>";
+            }
+            document.getElementById("img_div").innerHTML = img_data;
+            document.getElementById("img_div").style.display = "block";
+        }
+    // Function to remove an existing image from the form view
+    // function removeExistingImage(button) {
+    //     const wrapper = button.closest('.image-wrapper');
+    //     wrapper.remove();
+    // }
+
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     const fileInput = document.querySelector("input[name='catalog_product[image][]']");
+    //     // Create a separate container for new image previews
+    //     let newImagesContainer = document.getElementById("new-images");
+    //     if (!newImagesContainer) {
+    //         newImagesContainer = document.createElement("div");
+    //         newImagesContainer.id = "new-images";
+    //         newImagesContainer.classList.add("image-preview-container");
+    //         // Place it after the file input
+    //         fileInput.parentNode.insertBefore(newImagesContainer, fileInput.nextSibling);
+    //     }
+
+    //     fileInput.addEventListener("change", function (event) {
+    //         // Optionally, do not clear the container if you want to keep already added new images
+    //         // newImagesContainer.innerHTML = "";
+    //         const files = event.target.files;
+            
+    //         for (let i = 0; i < files.length; i++) {
+    //             const file = files[i];
+    //             const reader = new FileReader();
+
+    //             reader.onload = function (e) {
+    //                 const imageWrapper = document.createElement("div");
+    //                 imageWrapper.classList.add("image-wrapper");
+                    
+    //                 const img = document.createElement("img");
+    //                 img.src = e.target.result;
+    //                 img.width = 150;
+    //                 img.height = 150;
+    //                 img.style.borderRadius = "10px";
+    //                 img.style.objectFit = "cover";
+    //                 img.style.margin = "5px";
+                    
+    //                 // Radio button for new image to be set as main image
+    //                 const radioInput = document.createElement("input");
+    //                 radioInput.type = "radio";
+    //                 radioInput.name = "catalog_product[main_image]";
+    //                 radioInput.value = file.name; // or any unique identifier you prefer
+    //                 // If no main image is already selected (from existing images), select the first new image by default
+    //                 if (i === 0 && !document.querySelector("input[name='catalog_product[main_image]']:checked")) {
+    //                     radioInput.checked = true;
+    //                 }
+                    
+    //                 // Remove button for the new image
+    //                 const removeButton = document.createElement("button");
+    //                 removeButton.type = "button";
+    //                 removeButton.textContent = "Remove";
+    //                 removeButton.onclick = function () {
+    //                     imageWrapper.remove();
+    //                 };
+                    
+    //                 // (Optional) Hidden input to track new images if needed
+    //                 const hiddenInput = document.createElement("input");
+    //                 hiddenInput.type = "hidden";
+    //                 hiddenInput.name = "new_images[]";
+    //                 hiddenInput.value = file.name;
+                    
+    //                 imageWrapper.appendChild(img);
+    //                 imageWrapper.appendChild(radioInput);
+    //                 imageWrapper.appendChild(removeButton);
+    //                 imageWrapper.appendChild(hiddenInput);
+    //                 newImagesContainer.appendChild(imageWrapper);
+    //             };
+
+    //             reader.readAsDataURL(file);
+    //         }
+    //     });
+    // });
+</script>
+
+</body>
+</html>
