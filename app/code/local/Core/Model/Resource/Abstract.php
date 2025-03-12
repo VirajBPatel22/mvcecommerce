@@ -69,6 +69,8 @@ class Core_Model_Resource_Abstract
                 $this->_primaryKey,
                 $primaryId
             );
+           
+
             $this->getAdapter()->query($sql);
             
         } else {
@@ -85,7 +87,7 @@ class Core_Model_Resource_Abstract
                 $collums_value[] = sprintf("%s", addslashes($value));
                 }
             }
-            echo $query .= "( `" . (implode("`,`", $columns)) . "`) values (' " . (implode("','", $collums_value)) . "')";
+             $query .= "( `" . (implode("`,`", $columns)) . "`) values (' " . (implode("','", $collums_value)) . "')";
             
             $id = $this->getAdapter()->insert($query);
             $model->{$this->_primaryKey} = $id;

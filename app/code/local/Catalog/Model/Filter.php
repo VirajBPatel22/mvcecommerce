@@ -4,6 +4,10 @@ class Catalog_Model_Filter extends Core_Model_Abstract
     public function getProductColllection()
     {
         $collection = Mage::getModel('catalog/product')->getCollection();
+        // echo "<pre>";
+        // print_r($collection);
+        // echo "</pre>";
+        // die();
         $this->applyFilter($collection);
         return $collection;
     }

@@ -531,19 +531,23 @@ $count_img = count($data);
                     <div class="product-options">
                         <div class="option-group">
                             <label class="option-label">Quantity</label>
-                            <div class="quantity-selector">
-                                <button class="quantity-btn" onclick="decrementQuantity()">-</button>
-                                <input type="number" id="quantity" class="quantity-input" value="1" min="1" max="10">
-                                <button class="quantity-btn" onclick="incrementQuantity()">+</button>
-                            </div>
+                            <!-- <div class="quantity-selector"> -->
+                               
+                            <!-- </div> -->
                         </div>
                     </div>
                     
-                    <!-- Action Buttons -->
+                    <!-- Action Buttons --><form method = "post" action="<?php echo $this->getUrl("checkout/cart/add")?>">
+                        <!-- <input type="text" name = "qut"> -->
+                        <!-- <button class="quantity-btn" onclick="decrementQuantity()">-</button> -->
+                                <input type="number" id="quantity" name = "quentity" class="quantity-input" >
+                                <!-- <button class="quantity-btn" onclick="incrementQuantity()">+</button> -->
+                        <input type="hidden" name = "product_id" value = <?php echo $data[0]->getProductId()?>>
                     <div class="buttons-row">
-                        <button class="add-to-cart" onclick="addToCart()">
+                        <button class="add-to-cart" type = "submit">
                             <i class="fas fa-shopping-cart"></i> Add to Cart
                         </button>
+                    </form>
                         <button class="buy-now">
                             <i class="fas fa-bolt"></i> Buy Now
                         </button>

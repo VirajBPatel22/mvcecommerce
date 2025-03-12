@@ -96,8 +96,10 @@ class Core_Model_Abstract
         return $collection;
     }
     public function save(){
-        $this->getResource()->save($this);
+       
+        // die();
         $this->_beforeSave();
+        $this->getResource()->save($this);
         $this->_afterSave();
         return $this;
     }

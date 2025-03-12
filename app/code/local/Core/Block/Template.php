@@ -62,11 +62,5 @@ class Core_Block_Template
     {
         return Mage::getBlockSingleton('core/layout');
     }
-    // Add to Core_Block_Template class
-    public function addBlockJs($file)
-    {
-        $head = $this->getLayout()->getChild('head');
-        $head->addJs($file);
-        return $this;
-    }
+    
 }

@@ -13,8 +13,21 @@ class Catalog_Block_Product_List extends Core_Block_Template
     {
         $id = Mage::getModel('core/request')::getQuery('id');
         $product = Mage::getSingleton('catalog/filter')->getProductColllection();
-
         $data = $product->getData();
+        // print_r($data);
+        foreach($data as $img){
+            // echo "<pre>";
+
+            $model = Mage::getModel('catalog/media')->getCollection()->addFieldToFilter('product_id',$img->getProductId())
+            ->addFieldToFilter('default_img',1)->getData();
+            $filepath = $model[0]->getFilePath();
+            $img->setImage($filepath);
+            // print_r($filepath);
+            // echo "</pre>";
+        }
+        // print_r($data[0]->getProductId());
+        // die();
+
         return $data;
     }
 
@@ -34,9 +47,7 @@ class Catalog_Block_Product_List extends Core_Block_Template
 
 
         $finaldata = $data->getData();
-        echo "<pre>";
-        // print_r($finaldata);
-        echo "</pre>";
+        
         // die();
 
         return $finaldata;

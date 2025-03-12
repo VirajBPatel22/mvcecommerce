@@ -14,14 +14,42 @@ class Core_Model_Resource_Collection_Abstract
         $this->_model = $model;
         return $this;
     }
-    public function select($columns = ["*"]) 
-    { 
-        $this->_select['FROM'] = ["main_table" => $this->_resource->getTableName()]; 
-        $columns = is_array($columns) ? $columns : [$columns]; 
-        foreach ($columns as $column) { 
-            $this->_select['COLUMNS'][] = "main_table.".$column; 
-        } 
-        return $this; 
+    // public function select($columns = ["*"]) 
+    // { 
+    //     $this->_select['FROM'] = ["main_table" => $this->_resource->getTableName()];
+    //     $this->_select["COLUMS"] =[];
+    //     $columns = is_array($columns) ? $columns : [$columns]; 
+    //     foreach ($columns as $alias=>$column) {
+    //         if () {
+                
+    //         } else {
+                
+    //         }
+             
+            
+    //         $this->_select['COLUMNS'][] = "main_table.".$column; 
+    //     } 
+    //     return $this; 
+    // }
+
+    public function select($columns = ["*"])
+    {
+        $this->_select['FROM'] = ["main_table" => $this->_resource->getTableName()];
+        $this->_select['COLUMNS'] = [];
+        $columns = is_array($columns) ? $columns : [$columns];
+        foreach ($columns as $alias=>$column) {
+            // Mage::log($alias);
+            // Mage::log($column);
+            // die;
+            if(is_integer($alias))
+            {
+                $this->_select['COLUMNS'][] = "main_table." . $column;
+
+            }else{
+                $this->_select['COLUMNS'][] = $alias . " AS ". $column;
+            }
+        }
+        return $this;
     }
     public function getData()
     {
@@ -108,7 +136,8 @@ array_values($leftjoin['tablename'])[0],array_keys($leftjoin['tablename'])[0],  
             $orderbysql = " ORDER BY " . implode(',', $this->_select['ORDER_BY']);
             $query = $query . " " . $orderbysql;
         }
-
+        // print($query);
+        // die();
         return $query;
     }
     public function where($field, $value)
@@ -222,4 +251,14 @@ $columnname, $alias);
     private function getTableName($table) { 
         return array_values($table)[0]; 
     } 
+    public function getfirstItem(){
+        $data = $this->getdata();
+        if(isset($data[0])){
+            return $data[0];
+        }
+        else{
+            return $this->_model;
+        }
+
+    }
 }
