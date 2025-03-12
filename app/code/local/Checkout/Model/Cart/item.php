@@ -1,5 +1,5 @@
 <?php
-class Checkout_Model_Cart_item extends Core_Model_Abstract{
+class Checkout_Model_Cart_Item extends Core_Model_Abstract{
     protected $_product;
 
     public function init(){

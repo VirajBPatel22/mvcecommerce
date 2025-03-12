@@ -25,7 +25,7 @@ class Catalog_Controller_Product
         $layout->toHtml();
     }
     public function TestAction()
-    {
+    {   
         // $collections = Mage::getModel("catalog/filter")->getProductColllection();
         // $query = $collections->prepareQuery();
         // print($query);
