@@ -1,13 +1,13 @@
 <style>
 
-        .container {
+        /* .container {
             max-width: 600px;
             margin: 50px auto;
             background: white;
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        }
+        } */
 
         h3 {
             font-weight: bold;
@@ -60,8 +60,7 @@
             border-top: 2px solid #eee;
         }
     </style>
-
-
+   
     <div class="container">
         <!-- Shipping Method Form -->
         <form action="<?php echo $this->getUrl("checkout/cart/saveshipping")?>" method="POST" class="mb-4">
@@ -69,19 +68,19 @@
 
             <div class="mb-3">
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="shipping_type" id="standard" value="standard" checked>
+                    <input class="form-check-input" type="radio" name="shipping_type" id="standard" value="standard" <?php  if($this->info()=='standard')echo 'checked' ?> >
                     <label class="form-check-label" for="standard">
                         Standard Delivery (3-5 days,₹200)
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="shipping_type" id="express" value="express">
+                    <input class="form-check-input" type="radio" name="shipping_type" id="express" value="express" <?php  if($this->info()=='express')echo 'checked' ?>>
                     <label class="form-check-label" for="express">
                         Express Delivery (1-2 days,₹300)
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="shipping_type" id="pickup" value="normal">
+                    <input class="form-check-input" type="radio" name="shipping_type" id="pickup" value="normal" <?php  if($this->info()=='normal')echo 'checked' ?>>
                     <label class="form-check-label" for="normal">
                         Pick-up from Store (₹0)
                     </label>

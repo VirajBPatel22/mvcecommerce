@@ -60,12 +60,19 @@ class Checkout_Controller_Cart {
             print($totalAmount-$totalDiscount);
             // die();
             $cartModel = Mage::getSingleton('checkout/session')
-            ->getCart()
+                ->getCart()
                 ->setTotalAmount($totalAmount-$totalDiscount)
                 ->setCouponCode($couponCode)
                 ->setCouponDiscount($totalDiscount)
                 ->save();
-
+        }
+        else{
+            $cartModel = Mage::getSingleton('checkout/session')
+            ->getCart()
+            ->setTotalAmount($totalAmount)
+            ->setCouponCode('')
+            ->setCouponDiscount(0)
+            ->save();
 
         }
         header("Location: http://localhost/ecommerecemvc/checkout/cart/index");
@@ -96,6 +103,16 @@ class Checkout_Controller_Cart {
         $shipping['cart_id']=$cartId;
         $billing['typeofaddress']='billing';
         $shipping['typeofaddress']='shipping';
+        $billinginfo = Mage::getBlock('checkout/cart_address')->billinginfo();
+        $shippinginfo = Mage::getBlock('checkout/cart_address')->shippinginfo();
+        if($billinginfo){
+            $billingAddressId = $billinginfo->getfirstItem()->getAddressId();
+            $billing['address_id']=$billingAddressId;
+        }
+        if($shippinginfo){
+            $shippingAddressId = $shippinginfo->getfirstItem()->getAddressId();
+            $shipping['address_id']=$shippingAddressId;
+        }
         Mage::getModel('checkout/cart_address')->setData($billing)->save();
         Mage::getModel('checkout/cart_address')->setData($shipping)->save();
         header("Location: http://localhost/ecommerecemvc/checkout/cart/shipping");
