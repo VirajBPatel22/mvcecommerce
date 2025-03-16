@@ -1,6 +1,5 @@
 <?php
-class Checkout_Block_cart_Shipping extends Core_Block_Template
-{
+class Checkout_Block_Shipping_Index extends Core_Block_Layout{
     public function info()
     {
         // print_r($this);
@@ -10,3 +9,4 @@ class Checkout_Block_cart_Shipping extends Core_Block_Template
         return $cartModel->getShippingMethod();
     }
 }
+?>
