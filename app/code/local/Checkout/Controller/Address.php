@@ -1,7 +1,6 @@
 <?php 
 class Checkout_Controller_Address{
     public function indexAction() {
-        // echo get_class() . "<br>" . __FUNCTION__;
         $layout =  Mage::getBlock('core/layout');
         $view = $layout->createBlock('checkout/Address_Index')
                     ->setTemplate('checkout/address/index.phtml');
@@ -25,18 +24,22 @@ class Checkout_Controller_Address{
         $shipping['typeofaddress']='shipping';
         $billinginfo = Mage::getBlock('checkout/address_index')->billinginfo();
         $shippinginfo = Mage::getBlock('checkout/address_index')->shippinginfo();
-        if($billinginfo){
-            $billingAddressId = $billinginfo->getfirstItem()->getAddressId();
-            $billing['address_id']=$billingAddressId;
-        }
-        if($shippinginfo){
-            $shippingAddressId = $shippinginfo->getfirstItem()->getAddressId();
-            $shipping['address_id']=$shippingAddressId;
-        }
+        // echo "<pre>";
+        // print_r($billinginfo);
+        // print_r($shippinginfo);
+        // echo "</pre>";
+        // // die();
+        // if($billinginfo){
+        //     $billingAddressId = $billinginfo->getfirstItem()->getAddressId();
+        //     $billing['address_id']=$billingAddressId;
+        // }
+        // if($shippinginfo){
+        //     $shippingAddressId = $shippinginfo->getfirstItem()->getAddressId();
+        //     $shipping['address_id']=$shippingAddressId;
+        // }
         Mage::getModel('checkout/cart_address')->setData($billing)->save();
         Mage::getModel('checkout/cart_address')->setData($shipping)->save();
         header("Location: http://localhost/ecommerecemvc/checkout/shipping/index");
-
     }
 
 }

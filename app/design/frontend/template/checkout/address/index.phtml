@@ -191,7 +191,7 @@
         <h2 style="text-align: center; margin: 0;">Billing and Shipping Details</h2>
     </div>
 
-    <form action="<?php echo $this->getUrl('*/*/saveaddress') ?>" method="POST">
+    <form action="<?php echo $this->getUrl('checkout/address/save') ?>" method="POST">
         <!-- Personal Details -->
         <div class="form-section">
             <div class="section-header">Personal Information</div>
@@ -220,7 +220,7 @@
             <div class="address-column">
                 <div class="form-section">
                     <div class="section-header">Billing Address</div>
-                    <input type="hidden" name="billing[address_id]" id="billing_address_id" value="<?php echo isset($billingAddressId) ? $billingAddressId : ''; ?>">
+                    <input type="hidden" name="billing[address_id]" id="billing_address_id" value="<?php echo $this->billinginfo()->getfirstItem()->getAddressId()  ?>">
 
                     <div class="form-group" style="margin-bottom: 10px;">
                         <label class="form-label" for="billing_street">Street Address</label>
@@ -262,7 +262,7 @@
             <div class="address-column">
                 <div class="form-section">
                     <div class="section-header">Shipping Address</div>
-                    <input type="hidden" name="shipping[address_id]" id="shipping_address_id" value="<?php echo isset($shippingAddressId) ? $shippingAddressId : ''; ?>">
+                    <input type="hidden" name="shipping[address_id]" id="shipping_address_id" value="<?php echo $this->shippinginfo()->getfirstItem()->getAddressId() ?>">
 
                     <div class="checkbox-container">
                         <input type="checkbox" class="form-check-input" id="same_as_billing" onclick="copyBilling()">

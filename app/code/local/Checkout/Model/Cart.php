@@ -10,25 +10,23 @@ class Checkout_Model_Cart extends Core_Model_Abstract
     {
         $previtem = Mage::getModel('checkout/cart_item')
             ->getCollection()
-            ->AddFieldToFilter('cart_id',['='=>$this->getcartId()])
-            ->AddFieldToFilter('product_id',['='=>$product_id])
+            ->AddFieldToFilter('cart_id', ['=' => $this->getcartId()])
+            ->AddFieldToFilter('product_id', ['=' => $product_id])
             ->getdata();
-        
-        if($previtem){
+
+        if ($previtem) {
             $addproduct = Mage::getModel('checkout/cart_item')
                 ->setItemId($previtem[0]->getItemId())
                 ->setProductId($product_id)
                 ->setCartId($this->getCartId())
-                ->setProductQuantity((int)$quentity+(int)$previtem[0]->getProductQuantity())
+                ->setProductQuantity((int)$quentity + (int)$previtem[0]->getProductQuantity())
                 ->save();
-        }
-        else{
+        } else {
             $addproduct = Mage::getModel('checkout/cart_item')
-            ->setProductId($product_id)
-            ->setCartId($this->getCartId())
-            ->setProductQuantity($quentity)
-            ->save();
-
+                ->setProductId($product_id)
+                ->setCartId($this->getCartId())
+                ->setProductQuantity($quentity)
+                ->save();
         }
         return $this;
     }
@@ -36,50 +34,37 @@ class Checkout_Model_Cart extends Core_Model_Abstract
     {
         $cartDatas = $this->getItemCollection()
             ->getData();
-        echo "<pre>";
-        print_r($cartDatas);
         foreach ($cartDatas as $cartData) {
             if ($cartData->getItemId() == $item_id) {
                 $cartData->delete();
             }
         }
-       // print_r($this);
-
         return $this;
     }
 
-    public function updateItem($item_id,$quantity)
+    public function updateItem($item_id, $quantity)
     {
         $cartDatas = $this->getItemCollection()
-                          ->getData();
-        // echo "<pre>";
-        // print_r($cartDatas);
+            ->getData();
         foreach ($cartDatas as $cartData) {
             if ($cartData->getItemId() == $item_id) {
-               $cartData->setProductQuantity($quantity)
-                        ->save(); 
+                $cartData->setProductQuantity($quantity)
+                    ->save();
             }
         }
-       // print_r($this);
-
         return $this;
     }
     public function _beforesave()
     {
-        echo "<pre>";
-        print_r($this);
-        echo "</pre>";
-        // die();
-        // print('in befor save in cart model');
         $totalamount = 0;
         $cartitemdata = $this->getItemCollection()->getdata();
-        // Mage::getModel('checkout/cart_item')->getCollection()
-        // ->addFieldToFilter('cart_id',['='=>$this->getCartId()])->getdata();
         foreach ($cartitemdata as $cartamount) {
             $totalamount += $cartamount->getSubTotal();
         }
-        $totalamount=$totalamount+(int)$this->getShippingAmount();
-        $this->setTotalAmount($totalamount-(int)$this->getCouponDiscount());
+        $totalamount = $totalamount + (int)$this->getShippingAmount();
+        $this->setTotalAmount($totalamount - (int)$this->getCouponDiscount());
+        $date = new DateTime();
+        $this->setUpdatedAt($date->format("Y/m/d H:i:s"));
     }
     public function getItemCollection()
     {
