@@ -6,7 +6,7 @@ Class Checkout_Model_Session extends Core_Model_Session{
         $cart = Mage::getModel('checkout/cart')
             ->load($cart_id);
         if(!$cart->getCartId()){
-            $cart->setCustomerId('1')
+            $cart->setCustomerId($this->get('customer_id'))
             ->save();
             // $cart_iis$cartdata->getCartId());
 

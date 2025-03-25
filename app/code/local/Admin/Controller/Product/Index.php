@@ -2,24 +2,24 @@
 
 class Admin_Controller_Product_Index extends Core_Controller_Admin_Action
 {
-    // protected $_allowedActions =['new'];
     public function newAction()
     {
         $product = Mage::getModel('catalog/product');
-        $layout = Mage::getBlock('core/layout');
-        $view = $layout->createBlock('Admin/Product_Index_New')
+        $view = $this->getLayout()->createBlock('Admin/Product_Index_New')
             ->setTemplate('admin/product/index/new.phtml');
-        $layout->getChild('content')->addChild('new', $view);
-        $layout->toHtml();
+        $this->getLayout()->getChild('content')->addChild('new', $view);
+        $this->getLayout()->toHtml();
     }
-
     public function listAction()
     {
-        $layout = Mage::getBlock('core/layout');
-        $view = $layout->createBlock('Admin/Product_Index_List')
+        $view = $this->getLayout()
+            ->createBlock('Admin/Product_Index_List')
             ->setTemplate('admin/product/index/list.phtml');
-        $layout->getChild('content')->addChild('list', $view);
-        $layout->toHtml();
+        $this->getLayout()
+            ->getChild('content')
+            ->addChild('list', $view);
+
+        $this->getLayout()->toHtml();
     }
 
     public function saveAction()
@@ -29,7 +29,9 @@ class Admin_Controller_Product_Index extends Core_Controller_Admin_Action
         $name = substr($data["name"], 0, 5);
         $sku = $data["category_id"] . $name;
         $data["sku"] = $sku;
-        Mage::getModel('catalog/product')->setData($data)->save();
+        Mage::getModel('catalog/product')
+            ->setData($data)
+            ->save();
         $url = Mage::getBaseUrl() . $request->getModuleName() . "/" . $request->getControllerName() . "/list";
         header("location: {$url}");
         exit();
@@ -44,5 +46,10 @@ class Admin_Controller_Product_Index extends Core_Controller_Admin_Action
         $product->delete();
         header("Location: " . Mage::getBaseUrl() . "admin/product_index/list");
         exit();
+    }
+    public function exportCsvAction()
+    {
+        Mage::getModel('admin/csv')
+            ->exportCsv(Mage::getModel('catalog/product'));
     }
 }

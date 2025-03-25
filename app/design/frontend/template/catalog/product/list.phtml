@@ -1,263 +1,162 @@
 <?php
+
 $data1 = $this->getProduct();
 $mediaBaseUrl = Mage::getBaseUrl();
 $datafilter = $this->filterdata();
 $category = $this->getcategoryname();
 ?>
+<style>
+/* Main Layout */
+.main-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
 
-<!DOCTYPE html>
-<html lang="en">
+/* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-right: 20px;
+}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Cards</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+.sidebar h3 {
+    font-size: 18px;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
 
-    <style>
-        .main-container {
-            display: flex;
-            gap: 20px;
-            padding: 20px;
-        }
+.sidebar label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 14px;
+}
 
-        .sidebar {
-            width: 250px;
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+.sidebar input[type="checkbox"] {
+    margin-right: 8px;
+}
 
-        .sidebar h3 {
-            margin-bottom: 15px;
-            font-size: 20px;
-            color: #333;
-        }
+.sidebar button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 100%;
+    margin-top: 10px;
+}
 
-        .sidebar form {
-            display: flex;
-            flex-direction: column;
-        }
+.sidebar button[type="submit"]:hover {
+    background-color: #45a049;
+}
 
-        .sidebar label {
-            font-size: 14px;
-            margin: 5px 0;
-            cursor: pointer;
-        }
+/* Product Section Styling */
+.product-section {
+    flex: 1;
+}
 
-        .sidebar input[type="number"] {
-            width: calc(50% - 5px);
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
+.container {
+    width: 100%;
+}
 
-        .sidebar button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px;
+}
 
-        .sidebar button:hover {
-            background-color: #0056b3;
-        }
+.product-card {
+    flex: 0 0 calc(33.333% - 20px);
+    margin: 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
 
-        .product-section {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+.product-card img {
+    max-width: 100%;
+    height: 200px;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
 
-        .row {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
+.product-card h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    min-height: 40px;
+    color: #333;
+}
 
-        .product-card {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-            width: 250px;
-            transition: transform 0.3s ease-in-out;
-        }
+.product-card .price {
+    font-size: 18px;
+    color: #e63946;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
 
-        .product-card img {
-            width: 200px;
-            height: 100px;
-            border-radius: 10px;
-        }
+.view-btn {
+    background-color: #2185d0;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-        .view-btn {
-            margin-top: 10px;
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
+.view-btn:hover {
+    background-color: #1a69a4;
+}
 
-        .product-card:hover {
-            transform: translateY(-5px);
-        }
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+    
+    .product-card {
+        flex: 0 0 calc(50% - 20px);
+    }
+}
 
-        @media (max-width: 768px) {
-            .main-container {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .sidebar {
-                width: 100%;
-            }
-        }
-    </style>
-
-
-    <!-- Other head elements and styles -->
-</head>
-
-
-<!-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const idParam = urlParams.get('id');
-            const colorParam = urlParams.get('color');
-            const brandParam = urlParams.get('brand');
-
-            if (idParam) {
-                const ids = idParam.split(',');
-                document.querySelectorAll('input[name="id[]"]').forEach(checkbox => {
-                    if (ids.includes(checkbox.value)) {
-                        checkbox.checked = true;
-                    }
-                });
-            }
-
-            if (colorParam) {
-                const colors = colorParam.split(',');
-                document.querySelectorAll('input[name="color[]"]').forEach(checkbox => {
-                    if (colors.includes(checkbox.value)) {
-                        checkbox.checked = true;
-                    }
-                });
-            }
-
-            if (brandParam) {
-                const brands = brandParam.split(',');
-                document.querySelectorAll('input[name="brand[]"]').forEach(checkbox => {
-                    if (brands.includes(checkbox.value)) {
-                        checkbox.checked = true;
-                    }
-                });
-            }
-
-            document.getElementById('filter-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const form = new FormData(this);
-                const params = new URLSearchParams();
-
-                const selectedCategories = [];
-                document.querySelectorAll('input[name="id[]"]:checked').forEach(checkbox => {
-                    selectedCategories.push(checkbox.value);
-                });
-                if (selectedCategories.length > 0) {
-                    params.append('id', selectedCategories.join(','));
-                }
-
-                const selectedColors = [];
-                document.querySelectorAll('input[name="color[]"]:checked').forEach(checkbox => {
-                    selectedColors.push(checkbox.value);
-                });
-                if (selectedColors.length > 0) {
-                    params.append('color', selectedColors.join(','));
-                }
-
-                const selectedBrands = [];
-                document.querySelectorAll('input[name="brand[]"]:checked').forEach(checkbox => {
-                    selectedBrands.push(checkbox.value);
-                });
-                if (selectedBrands.length > 0) {
-                    params.append('brand', selectedBrands.join(','));
-                }
-
-                for (const [key, value] of form.entries()) {
-                    if (!['id[]', 'color[]', 'brand[]'].includes(key) && value.trim() !== '') {
-                        params.append(key, value);
-                    }
-                }
-
-                const baseUrl = 'http://localhost/ecommerecemvc/catalog/product/list/';
-                window.location.href = `${baseUrl}?${params.toString()}`;
-            });
-
-            document.getElementById('selectAll').addEventListener('change', function() {
-                document.querySelectorAll('input[name="id[]"]').forEach(checkbox => {
-                    checkbox.checked = this.checked;
-                });
-            });
-        });
-    </script> -->
-
-<!-- <script>
-        $(document).ready(function() {
-            function filterProducts() {
-                let minPrice = $("input[name='min_price']").val().trim() !== "" ? parseFloat($("input[name='min_price']").val()) : 0;
-                let maxPrice = $("input[name='max_price']").val().trim() !== "" ? parseFloat($("input[name='max_price']").val()) : Infinity;
-
-                console.log("Min Price:", minPrice, "Max Price:", maxPrice);
-
-                $(".product-card").each(function() {
-                    let priceText = $(this).find(".price").text().trim();
-                    let price = parseFloat(priceText.replace("Rs. ", "").replace(",", "").trim());
-
-                    console.log("Extracted Price Text:", priceText, "Converted Price:", price);
-
-
-                    console.log("Product Price:", price, "Visible Before:", $(this).is(":visible"));
-
-                    if (price >= minPrice && price <= maxPrice) {
-                        $(this).show();
-                        console.log("Product is now VISIBLE ✅");
-                    } else {
-                        $(this).hide();
-                        console.log("Product is now HIDDEN ❌");
-                    }
-                });
-            }
-
-            $("#filter-form").on("submit", function(e) {
-                e.preventDefault();
-                filterProducts();
-            });
-
-            $("input[name='min_price'], input[name='max_price']").on("input", function() {
-                filterProducts();
-            });
-        });
-    </script> -->
-
-</head>
+@media (max-width: 480px) {
+    .product-card {
+        flex: 0 0 100%;
+    }
+}
+</style>
 
 <body>
+    
     <div class="main-container">
         <!-- <div class="sidebar"> -->
+
             <?php $this->getChildHtml('filter'); ?>
 
         <!-- </div> -->
@@ -267,6 +166,7 @@ $category = $this->getcategoryname();
 
         </div>
     </div>
+       <?php // $data = $this->listdata();?>
 </body>
 
 </html>

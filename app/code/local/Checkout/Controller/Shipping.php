@@ -1,6 +1,6 @@
 <?php
 
-class Checkout_Controller_Shipping
+class Checkout_Controller_Shipping extends Core_Controller_Customer_Action
 {
     public function indexAction()
     {
@@ -31,6 +31,6 @@ class Checkout_Controller_Shipping
                 ->setShippingAmount($shippingAmount)
                 ->save();
         }
-        header("Location: http://localhost/ecommerecemvc/checkout/cart/index");
+        header("Location: http://localhost/ecommerecemvc/checkout/order/placeorder");
     }
 }

@@ -4,15 +4,23 @@ class Core_Block_Template
 {
     protected $_child = [];
     protected $_template;
+    protected $_parent = null;
 
     public function toHtml()
     {
-
         include_once(Mage::getBaseDir() . '\app\design\frontend\template\\' . $this->_template);
+    }
+    public function setParent($a){
+        $this->_parent = $a;
+        return $this;
+    }
+    public function getParent(){
+        return $this->_parent;
     }
 
     public function addChild($key, $block)
     {
+        $block->setParent($this);
         $this->_child[$key] = $block;
         return $this;
     }

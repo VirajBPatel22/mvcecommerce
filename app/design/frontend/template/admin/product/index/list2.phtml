@@ -1,0 +1,59 @@
+<?php
+$data = $this->listdata();
+$this->getChildHtml("toolbar");
+?>
+<body>
+    <button>
+        <a href="<?php echo $this->getUrl("*/*/new") ?>">
+            click to add new Product
+        </a>
+    </button>
+    <br>
+    <table border=3 cellpadding=2px>
+        <thead>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category_Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>SKU</th>
+            <th>Stock</th>
+            <th>Delete</th>
+            <th>Edit</th>
+        </thead>
+        <tbody>
+            <?php foreach ($data as $_data): ?>
+                <tr>
+                    <td><?php echo $_data->getProductId(); ?></td>
+                    <td><?php echo $_data->getName(); ?></td>
+                    <td><?php echo $_data->getCategoryName(); ?></td>
+                    <td><?php echo $_data->getDescription(); ?></td>
+                    <td><?php echo number_format($_data->getPrice(), 2); ?></td>
+                    <td><?php echo $_data->getSku(); ?></td>
+                    <td><?php echo $_data->getStockQuantity(); ?></td>
+                    <?php
+                    $id = $_data->getProductId();
+                    $url = Mage::getBaseUrl();
+                    ?>
+                    <td>
+                        <a href="<?php echo $url; ?>admin/product_index/delete/?id=<?php echo $id; ?>"
+                            onclick="return deleteprod();">
+                            Delete
+                        </a>
+                    </td>
+
+                    <td><a href="<?php echo $url ?>admin/product_index/new/?id=<?php echo $id; ?>">Edit</a></td>
+
+
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+
+    </table>
+    <a href="<?php echo $this->getUrl("admin/order/list") ?>">View Orders</a>
+    <script>
+        function deleteprod() {
+            return confirm("are you sure you wanted to delete this product");
+        }
+    </script>
+</body>

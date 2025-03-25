@@ -1,10 +1,16 @@
-<?php  $data =$this->getCategory();?>
+<?php 
 
-   
+$data = $this->listdata();
+$this->getChildHtml("toolbar");
+?>
 
         <div class="col-md-2">
+            <br>
+            <a class="export-csv" href="http://localhost/ecommerecemvc/admin/category_index/exportCsv">Export to CSV</a>
+            <br>
         <a class = "add-new" href="http://localhost/ecommerecemvc/admin/category_index/new">Add Category</a>
-
+        <a class = "add-new" href="<?php echo $this->getUrl('*/*/exportCsv'); ?>">Export to CSV</a>
+        
     </div>
         <table>
             <tr>

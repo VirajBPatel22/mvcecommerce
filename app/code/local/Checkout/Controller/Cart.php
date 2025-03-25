@@ -39,14 +39,12 @@ class Checkout_Controller_Cart {
         // $delimg = $request->getParam('catalog_image_delete');
         $product_id = $request->getParam('product_id');
         $quentity = $request->getParam('quentity');
-        $cart = Mage::getSingleton('checkout/session')->getcart();  
-        $cart->AddProduct($product_id,$quentity)->save();
+
+        $cart = Mage::getSingleton('checkout/session')
+            ->getcart();  
+        $cart->AddProduct($product_id,$quentity)
+            ->save();
         header("Location: http://localhost/ecommerecemvc/checkout/cart/index");
-        $layout =  Mage::getBlock('core/layout');
-        $view = $layout->createBlock('checkout/Cart_Add')
-                    ->setTemplate('checkout/cart/add.phtml');
-        $layout->getChild('content')->addChild('add', $view);
-        $layout->toHtml();
     }
 
     public function couponAction(){
@@ -169,10 +167,6 @@ class Checkout_Controller_Cart {
         
     }
     public function saveshippingAction(){
-        echo "<pre>";
-        print_r($_POST);
-        echo "</pre>";
-        // die();
         $request = Mage::getModel('core/request');
         // $delimg = $request->getParam('catalog_image_delete');
         $shippingType = $request->getParam('shipping_type');

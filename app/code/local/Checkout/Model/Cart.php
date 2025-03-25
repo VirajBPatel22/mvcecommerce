@@ -72,4 +72,18 @@ class Checkout_Model_Cart extends Core_Model_Abstract
             ->getCollection()
             ->addFieldToFilter('cart_id', ['=' => $this->getCartId()]);
     }
+    public function getAddressCollection(){
+        return Mage::getModel('checkout/cart_address')
+            ->getCollection()
+            ->addFieldToFilter('cart_id', ['=' => $this->getCartId()]);
+    }
+    public function getShippingAddress(){
+        return $this->getAddressCollection()
+            ->addFieldToFilter('typeofaddress','shipping');
+    }
+    public function getBillingAddress(){
+        return $this->getAddressCollection()
+            ->addFieldToFilter('typeofaddress','shipping');
+
+    }
 }

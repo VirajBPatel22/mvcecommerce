@@ -1,7 +1,17 @@
-<?php  $data =$this->getProduct();?>
+<?php 
+
+$data = $this->listdata();
+$this->getChildHtml("toolbar");
+?>
+<br>
         <div class="col-md-2">
         <a class = "add-new" href="http://localhost/ecommerecemvc/admin/product_index/new">Add Product</a>
+        <a class = "add-new" href="<?php echo $this->getUrl('*/*/exportCsv'); ?>">Export to CSV</a>
 
+        <div class="export-container">
+            <a href="<?php echo $this->getUrl('*/*/exportCsv'); ?>" class="export-btn">Export to CSV</a>
+        </div>
+       
     </div>
         <table>
             <tr>

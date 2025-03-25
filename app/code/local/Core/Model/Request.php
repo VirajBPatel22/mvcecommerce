@@ -47,7 +47,7 @@ class Core_Model_Request {
         if(isset($_GET[$field])) {
             return $_GET[$field];
         } else {
-            return 0;
+            return '';
         }
     }
     public function getBaseUrl(){

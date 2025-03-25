@@ -1,43 +1,49 @@
 <?php
 
-class Admin_Controller_Customer_Index {
+class Admin_Controller_Customer_Index  extends Core_Controller_Admin_Action {
     public function newAction() {
-        $layout =  Mage::getBlock('core/layout');
-        $view = $layout->createBlock('Admin/Customer_Index_New')
-        ->setTemplate('admin/product/index/new.phtml');
+        $view = $this->getLayout()
+            ->createBlock('Admin/Customer_Index_New')
+            ->setTemplate('admin/product/index/new.phtml');
         
-        $layout->getChild('content')->addChild('new', $view);
-        $layout->toHtml();
+        $this->getLayout()
+            ->getChild('content')
+            ->addChild('new', $view);
+        $this->getLayout()->toHtml();
 
     }
 
     public function listAction() {
-        $layout =  Mage::getBlock('core/layout');
-        $view = $layout->createBlock('Admin/Customer_Index_List')
-        ->setTemplate('admin/product/index/list.phtml');
+        $view = $this->getLayout()
+            ->createBlock('Admin/Customer_Index_List')
+            ->setTemplate('admin/product/index/list.phtml');
         
-        $layout->getChild('content')->addChild('list', $view);
-        $layout->toHtml();
+        $this->getLayout()
+            ->getChild('content')
+            ->addChild('list', $view);
+        $this->getLayout()->toHtml();
     }
 
     public function saveAction() {
-      
-        $layout =  Mage::getBlock('core/layout');
-        $view = $layout->createBlock('Admin/Customer_Index_Save')
-        ->setTemplate('admin/product/index/save.phtml');
+        $view = $this->getLayout()
+            ->createBlock('Admin/Customer_Index_Save')
+            ->setTemplate('admin/product/index/save.phtml');
         
-        $layout->getChild('content')->addChild('save', $view);
-        $layout->toHtml();
+        $this->getLayout()
+            ->getChild('content')
+            ->addChild('save', $view);
+        $this->getLayout()->toHtml();
 
     }
     
     public function deleteAction() {
-        $layout =  Mage::getBlock('core/layout');
-        $view = $layout->createBlock('Admin/Customer_Index_Delete')
-        ->setTemplate('admin/product/index/delete.phtml');
+        $view = $this->getLayout()
+            ->createBlock('Admin/Customer_Index_Delete')
+            ->setTemplate('admin/product/index/delete.phtml');
         
-        $layout->getChild('content')->addChild('delete', $view);
-        $layout->toHtml();
+        $this->getLayout()->getChild('content')
+            ->addChild('delete', $view);
+        $this->getLayout()->toHtml();
     }
 
 }

@@ -1,43 +1,52 @@
 <?php
 
-class Admin_Controller_Customer_Address {
-    public function newAction() {
-        $layout =  Mage::getBlock('core/layout');
-        $view = $layout->createBlock('Admin/Customer_Address_New')
-        ->setTemplate('admin/product/index/new.phtml');
-        $layout->getChild('content')->addChild('new', $view);
-        $layout->toHtml();
-
+class Admin_Controller_Customer_Address  extends Core_Controller_Admin_Action
+{
+    public function newAction()
+    {
+        $view = $this->getLayout()
+            ->createBlock('Admin/Customer_Address_New')
+            ->setTemplate('admin/product/index/new.phtml');
+        $this->getLayout()
+            ->getChild('content')
+            ->addChild('new', $view);
+        $this->getLayout()->toHtml();
     }
 
-    public function listAction() {
-        $layout =  Mage::getBlock('core/layout');
-        $view = $layout->createBlock('Admin/Customer_Address_List')
-        ->setTemplate('admin/product/index/list.phtml');
-        
-        $layout->getChild('content')->addChild('list', $view);
-        $layout->toHtml();
+    public function listAction()
+    {
+        $view = $this->getLayout()
+            ->createBlock('Admin/Customer_Address_List')
+            ->setTemplate('admin/product/index/list.phtml');
+        $this->getLayout()
+            ->getChild('content')
+            ->addChild('list', $view);
+        $this->getLayout()->toHtml();
     }
 
-    public function saveAction() {
-        $layout =  Mage::getBlock('core/layout');
-        $view = $layout->createBlock('Admin/Customer_Address_Save')
-        ->setTemplate('admin/product/index/save.phtml');
-        
-        $layout->getChild('content')->addChild('save', $view);
-        $layout->toHtml();
+    public function saveAction()
+    {
+        $layout = $this->getLayout();
+        // $layout = Mage::getBlock('core/layout');
 
-    }
-    
-    public function deleteAction() {
-        $layout =  Mage::getBlock('core/layout');
-        $view = $layout->createBlock('Admin/Customer_Address_Delete')
-        ->setTemplate('admin/product/index/delete.phtml');
-        
-        $layout->getChild('content')->addChild('delete', $view);
-        $layout->toHtml();
+        $view = $this->getLayout()
+            ->createBlock('Admin/Customer_Address_Save')
+            ->setTemplate('admin/product/index/save.phtml');
+
+        $this->getLayout()
+            ->getChild('content')
+            ->addChild('save', $view);
+        $this->getLayout()->toHtml();
     }
 
+    public function deleteAction()
+    {
+        $view = $this->getLayout()->createBlock('Admin/Customer_Address_Delete')
+            ->setTemplate('admin/product/index/delete.phtml');
+
+        $this->getLayout()
+            ->getChild('content')
+            ->addChild('delete', $view);
+        $this->getLayout()->toHtml();
+    }
 }
-
-?>

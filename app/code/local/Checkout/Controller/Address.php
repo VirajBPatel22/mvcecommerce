@@ -1,5 +1,5 @@
 <?php 
-class Checkout_Controller_Address{
+class Checkout_Controller_Address extends Core_Controller_Customer_Action{
     public function indexAction() {
         $layout =  Mage::getBlock('core/layout');
         $view = $layout->createBlock('checkout/Address_Index')

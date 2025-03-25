@@ -87,8 +87,8 @@ class Core_Model_Abstract
         
     }
     public function getcollection(){
-
     $collection = new $this->_CollectionClassName;
+   
         $collection->setResource($this->getResource())
         ->setModel($this)
         ->select();

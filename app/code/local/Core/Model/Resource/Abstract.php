@@ -25,7 +25,7 @@ class Core_Model_Resource_Abstract
     public function load($value,$field=null)
     {
         $field = (is_null($field))?$this->_primaryKey:$field;
-        $sql = "SELECT * FROM {$this->_tablename} WHERE {$field}='$value' LIMIT 1";
+        $sql = "SELECT * FROM `{$this->_tablename}` WHERE {$field}='$value' LIMIT 1";
     
         return $this->getAdapter()->feachRow($sql);
         
@@ -63,7 +63,7 @@ class Core_Model_Resource_Abstract
             }
             $columns = implode(",", $columns);
             $sql = sprintf(
-                "UPDATE %s SET %s WHERE %s=%d",
+                "UPDATE `%s` SET %s WHERE %s=%d",
                 $this->_tablename,
                 $columns,
                 $this->_primaryKey,
@@ -76,7 +76,7 @@ class Core_Model_Resource_Abstract
         } else {
             $columns = [];
             $collums_value = [];
-            $query = "insert into {$this->_tablename}";
+            $query = "insert into `{$this->_tablename}`";
 
             foreach ($data as $key => $value) {
                 if(in_array($key,$dbColumn)){

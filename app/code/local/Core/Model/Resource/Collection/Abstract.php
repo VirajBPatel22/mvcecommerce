@@ -46,7 +46,7 @@ class Core_Model_Resource_Collection_Abstract
                 $this->_select['COLUMNS'][] = "main_table." . $column;
 
             }else{
-                $this->_select['COLUMNS'][] = $alias . " AS ". $column;
+                $this->_select['COLUMNS'][] = $column . " AS ". $alias;
             }
         }
         return $this;
@@ -75,7 +75,7 @@ class Core_Model_Resource_Collection_Abstract
         $this->_select['']=array_filter($this->_select['COLUMNS']);
         $COLUMNS= $this->_select['COLUMNS']?implode(',', $this->_select['COLUMNS']):'*';
         
-        $query = sprintf("SELECT %s FROM %s AS %s", $COLUMNS,array_values($this->_select['FROM'])[0],array_keys($this->_select['FROM'])[0]);
+        $query = sprintf("SELECT %s FROM `%s` AS %s", $COLUMNS,array_values($this->_select['FROM'])[0],array_keys($this->_select['FROM'])[0]);
 
       
         if (isset($this->_select['JOIN_LEFT'])) { 
@@ -134,6 +134,10 @@ array_values($leftjoin['tablename'])[0],array_keys($leftjoin['tablename'])[0],  
         }
         if (isset($this->_select['ORDER_BY'])) {
             $orderbysql = " ORDER BY " . implode(',', $this->_select['ORDER_BY']);
+            $query = $query . " " . $orderbysql;
+        }
+        if (isset($this->_select['LIMIT'])) {
+            $orderbysql = " LIMIT " . $this->_select['LIMIT']['limit'] ." OFFSET " . $this->_select['LIMIT']['offset'] ;
             $query = $query . " " . $orderbysql;
         }
         // print($query);
@@ -260,5 +264,12 @@ $columnname, $alias);
             return $this->_model;
         }
 
+    }
+    public function Limit($limit, $offset = 0)
+    {
+        // $offset = ($offset - 1) * $limit;    
+        // print($offset);
+        $this->_select["LIMIT"] = ["limit" => $limit, "offset" => $offset];
+        return $this;
     }
 }

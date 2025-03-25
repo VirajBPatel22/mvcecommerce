@@ -7,6 +7,7 @@ class Catalog_Block_Product_List extends Core_Block_Template
         $filter=$this->getLayout()->createBlock('catalog/product_list_filter');
         $this->addChild('filter',$filter);
         $this->addChild('product',$product);
+        // $this->init();
 
     }
     public function getProduct()
@@ -57,4 +58,5 @@ class Catalog_Block_Product_List extends Core_Block_Template
         $data = Mage::getModel(('catalog/category'))->getCollection()->select()->getdata();
         return $data;
     }
+  
 }

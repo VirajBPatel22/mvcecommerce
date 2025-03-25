@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Pagination</title>
+    <style>
+        .pagination-container {
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .pagination-limit {
+            display: flex;
+            align-items: center;
+        }
+        
+        .pagination-limit label {
+            margin-right: 10px;
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        .pagination-limit select {
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+        }
+        
+        .pagination-nav {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .page-item {
+            list-style: none;
+            display: inline-block;
+        }
+        
+        .page-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            color: #007bff;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .page-link:hover {
+            background-color: #e9ecef;
+            color: #0056b3;
+        }
+        
+        .page-item.active .page-link {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        
+        .page-item.disabled .page-link {
+            color: #6c757d;
+            pointer-events: none;
+            background-color: #fff;
+            border-color: #dee2e6;
+        }
+        
+        .current-page-input {
+            width: 50px;
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+        
+        .go-to-page {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .go-to-page:hover {
+            background-color: #0069d9;
+        }
+        
+        .pagination-info {
+            color: #6c757d;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="pagination-container">
+        <form action="" method="get" id="paginationForm">
+            <div class="pagination-controls">
+                <div class="pagination-limit">
+                    <label for="limit">Show:</label>
+                    <select name="limit" id="limit" onchange="this.form.submit()">
+                        <option value="5">5 items</option>
+                        <option value="10">10 items</option>
+                        <option value="15">15 items</option>
+                        <option value="20">20 items</option>
+                    </select>
+                </div>
+                
+                <div class="pagination-info">
+                    Showing <span id="startItem">1</span>-<span id="endItem">5</span> of <span id="totalItems">100</span> items
+                </div>
+            </div>
+            
+            <input type="hidden" name="page" id="pageInput" value="1">
+            
+            <nav aria-label="Product pagination">
+                <ul class="pagination-nav">
+                    <li class="page-item disabled" id="prevPage">
+                        <a class="page-link" href="#" aria-label="Previous" onclick="goToPage('prev'); return false;">
+                            &laquo;
+                        </a>
+                    </li>
+                    
+                    <li class="page-item active" data-page="1">
+                        <a class="page-link" href="#" onclick="goToPage(1); return false;">1</a>
+                    </li>
+                    
+                    <li class="page-item" data-page="2">
+                        <a class="page-link" href="#" onclick="goToPage(2); return false;">2</a>
+                    </li>
+                    
+                    <li class="page-item" data-page="3">
+                        <a class="page-link" href="#" onclick="goToPage(3); return false;">3</a>
+                    </li>
+                    
+                    <li class="page-item" data-page="4">
+                        <a class="page-link" href="#" onclick="goToPage(4); return false;">4</a>
+                    </li>
+                    
+                    <li class="page-item" data-page="5">
+                        <a class="page-link" href="#" onclick="goToPage(5); return false;">5</a>
+                    </li>
+                    
+                    <li class="page-item">
+                        <span class="page-link">...</span>
+                    </li>
+                    
+                    <li class="page-item" data-page="10">
+                        <a class="page-link" href="#" onclick="goToPage(10); return false;">10</a>
+                    </li>
+                    
+                    <li class="page-item" id="nextPage">
+                        <a class="page-link" href="#" aria-label="Next" onclick="goToPage('next'); return false;">
+                            &raquo;
+                        </a>
+                    </li>
+                    
+                    <li class="page-item" style="margin-left: 10px;">
+                        <input type="number" class="current-page-input" id="goToPageInput" min="1" max="10" value="1">
+                    </li>
+                    
+                    <li class="page-item">
+                        <button type="button" class="go-to-page" onclick="goToPage(document.getElementById('goToPageInput').value)">Go</button>
+                    </li>
+                </ul>
+            </nav>
+        </form>
+    </div>
+
+    <script>
+        // Current state
+        let currentPage = 1;
+        let itemsPerPage = 5;
+        let totalItems = 100; // This should be dynamically set from your backend
+        let totalPages = Math.ceil(totalItems / itemsPerPage);
+        
+        // Initialize the pagination
+        function initPagination() {
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            currentPage = parseInt(urlParams.get('page')) || 1;
+            itemsPerPage = parseInt(urlParams.get('limit')) || 5;
+            
+            // Update the form values
+            document.getElementById('limit').value = itemsPerPage;
+            document.getElementById('pageInput').value = currentPage;
+            document.getElementById('goToPageInput').value = currentPage;
+            
+            // Update pagination info
+            updatePaginationInfo();
+            
+            // Update active page
+            updateActivePage();
+        }
+        
+        // Update the pagination info text
+        function updatePaginationInfo() {
+            const startItem = ((currentPage - 1) * itemsPerPage) + 1;
+            const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+            
+            document.getElementById('startItem').textContent = startItem;
+            document.getElementById('endItem').textContent = endItem;
+            document.getElementById('totalItems').textContent = totalItems;
+        }
+        
+        // Update which page is active
+        function updateActivePage() {
+            // Remove active class from all pages
+            document.querySelectorAll('.page-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active class to current page
+            const currentPageItem = document.querySelector(`.page-item[data-page="${currentPage}"]`);
+            if (currentPageItem) {
+                currentPageItem.classList.add('active');
+            }
+            
+            // Enable/disable prev/next buttons
+            document.getElementById('prevPage').classList.toggle('disabled', currentPage === 1);
+            document.getElementById('nextPage').classList.toggle('disabled', currentPage === totalPages);
+        }
+        
+        // Navigate to a specific page
+        function goToPage(page) {
+            if (page === 'prev') {
+                if (currentPage > 1) {
+                    currentPage--;
+                }
+            } else if (page === 'next') {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                }
+            } else {
+                currentPage = parseInt(page);
+            }
+            
+            // Validate page number
+            if (isNaN(currentPage) || currentPage < 1) {
+                currentPage = 1;
+            } else if (currentPage > totalPages) {
+                currentPage = totalPages;
+            }
+            
+            // Update the hidden input
+            document.getElementById('pageInput').value = currentPage;
+            
+            // Submit the form
+            document.getElementById('paginationForm').submit();
+        }
+        
+        // Initialize on page load
+        window.onload = function() {
+            initPagination();
+        };
+    </script>
+</body>
+</html>

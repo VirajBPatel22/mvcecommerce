@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<?php $category = Mage::getModel('catalog/category')->getCollection();
-$data = $category->getData();
+<?php
+$data = $this->CategoryData();
+$customer = $this->customerDetail();
 ?>
+
 <html lang="en">
 <script>
     // var filter = {
@@ -14,7 +16,7 @@ $data = $category->getData();
     //         alert(this.p);
 
     //     }
-       
+
     // }
     // filter.xyz();
     // filter.abc();
@@ -68,7 +70,7 @@ $data = $category->getData();
                                                                 </a></li>
                                                     <?php }
                                                     } ?>
-                                                  
+
                                                 </ul>
                                             </li>
 
@@ -88,11 +90,29 @@ $data = $category->getData();
                             <a href="<?php echo $this->getUrl('//'); ?>" class="btn btn-outline-dark">
                                 <i class="fas fa-home me-1"></i> Home
                             </a>
-                            <!-- <?php // if($_SESSION){ 
-                                    ?> -->
-                            <a href="login.html" class="btn btn-outline-dark">
-                                <i class="fas fa-user me-1"></i> Login
-                            </a>
+                            <?php if ($customer->getCustomerId()): ?>
+
+                                <!-- <li class="nav-item dropdown"> -->
+                                <a class="nav-link dropdown-toggle icon-text" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                        class="bi bi-person" viewBox="0 0 16 16">
+                                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM8 9a5.507 5.507 0 0 0-4.546 2.916.5.5 0 0 0 .433.749h8.226a.5.5 0 0 0 .433-.749A5.507 5.507 0 0 0 8 9z" />
+                                    </svg>
+                                    <?php echo $customer->getFirstName(); ?> <!-- Show user's first name -->
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                    <li><a class="dropdown-item" href="<?php echo $this->getUrl('customer/account_profile/dashboard'); ?>">Profile</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo $this->getUrl('customer/account/logout'); ?>">Logout</a></li>
+                                </ul>
+                                <!-- </li> -->
+
+
+
+                            <?php else: ?>
+                                <a href="<?php echo $this->getUrl("customer/account/login") ?>" class="btn btn-outline-dark">
+                                    <i class="fas fa-user me-1"></i> Login
+                                </a>
+                            <?php endif ?>
 
                             <!-- <?  // php }
                                     ?> -->
@@ -100,7 +120,7 @@ $data = $category->getData();
                             <a href="<?php echo $this->getUrl('checkout/cart/index'); ?>" class="btn btn-outline-dark position-relative">
                                 <i class="fas fa-shopping-cart"></i>
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    0
+                                    <?php echo $this->getcount(); ?>
                                 </span>
                             </a>
                         </div>
