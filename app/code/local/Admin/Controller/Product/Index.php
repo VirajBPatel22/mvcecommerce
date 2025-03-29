@@ -13,12 +13,10 @@ class Admin_Controller_Product_Index extends Core_Controller_Admin_Action
     public function listAction()
     {
         $view = $this->getLayout()
-            ->createBlock('Admin/Product_Index_List')
-            ->setTemplate('admin/product/index/list.phtml');
-        $this->getLayout()
-            ->getChild('content')
+            ->createBlock('Admin/Product_Index_List');
+            // ->setTemplate('admin/category/index/list.phtml');
+        $this->getLayout()->getChild('content')
             ->addChild('list', $view);
-
         $this->getLayout()->toHtml();
     }
 

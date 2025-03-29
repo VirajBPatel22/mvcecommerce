@@ -537,7 +537,8 @@ $count_img = count($data);
                         </div>
                     </div>
                     
-                    <!-- Action Buttons --><form method = "post" action = "<?php echo $this->getUrl("checkout/cart/add"); ?>" >
+                    <!-- Action Buttons -->
+                    <form id = "cartid" >
                         <!-- <input type="text" name = "qut"> -->
                         <!-- <button class="quantity-btn" onclick="decrementQuantity()">-</button> -->
                                 <input type="number" id="quantity" name = "quentity" class="quantity-input" >
@@ -633,6 +634,24 @@ $count_img = count($data);
 
     <script>
         // Image Gallery
+        $(document).ready(function(){
+            $('#cartid').submit(function(event){
+                event.preventDefault();
+                const formdata = $(this).serialize();
+                $.ajax({
+                    url:"<?php echo $this->getUrl("checkout/cart/add"); ?>",
+                    type:'POST',
+                    data: formdata,
+                    success: function(response){
+                        alert('add successful');
+                    },
+                    error: function (xhr,status,error){
+                        console.log('Error:',error);
+                        alert("failed");
+                    }
+                })
+            })
+        })
         document.addEventListener('DOMContentLoaded', function() {
             const thumbnails = document.querySelectorAll('.thumbnail');
             const mainImage = document.getElementById('mainProductImage');

@@ -1,5 +1,11 @@
 <?php
 class Core_Model_Session{
+    protected $_messages = [
+        'messages'=>["success"=>"successfuly",
+                "error"=>"error occure",
+                "warning"=>"get warning"
+        ]
+    ];
     public function __construct()
     {
         @session_start();
@@ -25,8 +31,14 @@ class Core_Model_Session{
         else{
             return "";
         }
-        
-
+    }
+    public function removemessage($key){
+        if(isset($_SESSION['message'][$key])){
+            unset($_SESSION['message'][$key]);
+        }
+        else{
+            return "";
+        }
     }
 }
 

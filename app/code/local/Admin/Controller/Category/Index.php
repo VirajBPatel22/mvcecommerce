@@ -14,8 +14,8 @@ class Admin_Controller_Category_Index extends Core_Controller_Admin_Action
     public function listAction()
     {
         $view = $this->getLayout()
-            ->createBlock('Admin/Category_Index_List')
-            ->setTemplate('admin/category/index/list.phtml');
+            ->createBlock('Admin/Category_Index_List');
+            // ->setTemplate('admin/category/index/list.phtml');
         $this->getLayout()->getChild('content')
             ->addChild('list', $view);
         $this->getLayout()->toHtml();

@@ -13,6 +13,8 @@ class Core_Block_Layout extends Core_Block_Template
     public function prepareChildren() {
         $header = $this->createBlock('page/header');    
         $this->addChild('header',$header);
+        $message = $this->createBlock('Core/Message');    
+        $this->addChild('message',$message);
         $content = $this->createBlock('page/content');    
         $this->addChild('content',$content);
         $footer = $this->createBlock('page/footer');    

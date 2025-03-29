@@ -13,7 +13,7 @@ $orderDetails = $this->orderInfo();
         
         <div class="order-summary">
             <p><strong>Subtotal:</strong> 
-                <?php echo $orderDetails->getTotalAmount() + $orderDetails->getCouponDiscount() - $orderDetails->getShippingAmount(); ?>
+                <?php echo (int)$orderDetails->getTotalAmount() + (int)$orderDetails->getCouponDiscount() - (int)$orderDetails->getShippingAmount(); ?>
             </p>
             <p><strong>Discount:</strong> <?php echo $orderDetails->getCouponDiscount() ?></p>
             <?php if ($orderDetails->getCouponCode()): ?>

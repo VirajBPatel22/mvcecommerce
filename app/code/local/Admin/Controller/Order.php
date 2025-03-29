@@ -5,8 +5,8 @@ class Admin_Controller_Order extends Core_Controller_Admin_Action
     {
         $layout = $this->getLayout();
         $view = $this->getLayout()
-            ->createBlock('admin/order_list')
-            ->setTemplate('admin/order/list.phtml');
+            ->createBlock('admin/order_list');
+            // ->setTemplate('admin/order/list.phtml');
         $this->getLayout()
             ->getChild('content')
             ->addChild('list', $view);

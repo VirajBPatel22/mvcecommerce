@@ -8,7 +8,7 @@ class Core_Block_Template
 
     public function toHtml()
     {
-        include_once(Mage::getBaseDir() . '\app\design\frontend\template\\' . $this->_template);
+        include(Mage::getBaseDir() . '\app\design\frontend\template\\' . $this->_template);
     }
     public function setParent($a){
         $this->_parent = $a;

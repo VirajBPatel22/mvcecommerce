@@ -22,9 +22,9 @@ class Catalog_Model_Filter extends Core_Model_Abstract
             unset($parameter["id"]);
         }
         if(!empty($parameter)){
-            $attribute_collection = Mage::getModel("catalog/attribute")->getCollection()->addFieldToFilter("name", ['IN' => array_keys($parameter)]);
-            
-           
+            $attribute_collection = Mage::getModel("catalog/attribute")
+                ->getCollection()
+                ->addFieldToFilter("name", ['IN' => array_keys($parameter)]);
             foreach ($attribute_collection->getData() as $attributedata) {
                
                 $collection->addAttributeToFilter($attributedata->getName(), $parameter[$attributedata->getName()]);

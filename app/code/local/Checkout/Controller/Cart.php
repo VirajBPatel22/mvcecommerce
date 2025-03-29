@@ -17,9 +17,16 @@ class Checkout_Controller_Cart {
         $request = Mage::getModel('core/request')->getParams();
         $item_id = $request['item_id'];
         $quantity = $request['quantity'];
-        Mage::getSingleton('checkout/session')->getCart()
-            ->updateItem($item_id, $quantity)
-            ->save();
+        
+        if(Mage::getSingleton('checkout/session')->getCart()
+        ->updateItem($item_id, $quantity)
+    ->save()){
+        echo "123";
+        Mage::getSingleton('core/message')->addMessage("success","product add successfully");
+        Mage::getSingleton('core/message')->addMessage("warning","product add successfully");
+        Mage::getSingleton('core/message')->addMessage("error","product add successfully");
+        
+    }
 
         header("Location: http://localhost/ecommerecemvc/checkout/cart/index ");
     }
@@ -42,8 +49,12 @@ class Checkout_Controller_Cart {
 
         $cart = Mage::getSingleton('checkout/session')
             ->getcart();  
-        $cart->AddProduct($product_id,$quentity)
-            ->save();
+        
+        if($cart->AddProduct($product_id,$quentity)
+        ->save()){
+    echo "123";
+            Mage::getSingleton('core/message')->addMessage("success","product add successfully");
+        }
         header("Location: http://localhost/ecommerecemvc/checkout/cart/index");
     }
 
